@@ -4,6 +4,7 @@ import { useBokuWaAnimeHomepageContext } from '../contexts/BokuWaAnimeContext/Bo
 
 import Header from "../components/Header/Header";
 import AnimeCard from '../components/AnimeCard/AnimeCard';
+import Button from '../components/Button/Button';
 import LoadingContainer from '../components/LoadingContainer/LoadingContainer';
 
 import '../App.css';
@@ -30,7 +31,7 @@ function BokuNoAnimeHomepage() {
         {animeList ? animeList.map((anime, i) => 
           <AnimeCard 
             key={anime.attributes.canonicalTitle + i}
-            titleEn={anime.attributes.titles.en}
+            titleEn={anime.attributes.titles.en || anime.attributes.titles.en_jp}
             titleJp={anime.attributes.titles.ja_jp}
             description={anime.attributes.description}
             image={anime.attributes.posterImage.original}
@@ -40,9 +41,9 @@ function BokuNoAnimeHomepage() {
         ) : <></>}
       </div>
       {animeList.length > 0}
-      <div style={{ marginTop: '24px' }}>
-        <button onClick={onPrevPageButtonPress} disabled={offset === 0}>{'←'}</button>
-        <button onClick={onNextPageButtonPress}>{'→'}</button>
+      <div style={{ marginTop: '24px', marginBottom: '24px', display: 'flex', gap: '16px' }}>
+        <Button onClick={onPrevPageButtonPress} disabled={offset === 0}>{'←'}</Button>
+        <Button onClick={onNextPageButtonPress}>{'→'}</Button>
       </div>
     </div>
   );
