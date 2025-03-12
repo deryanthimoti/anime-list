@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="500" height="200" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Wacky but Serious Font Style -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+      .text {
+        font-family: 'Press Start 2P', sans-serif;
+        font-size: 40px;
+        font-weight: bold;
+        fill: #ff4500;
+        stroke: #000000;
+        stroke-width: 3px;
+        letter-spacing: 3px;
+      }
+    </style>
+  </defs>
+  
+  <!-- Background Shadow Effect -->
+  <text x="52" y="102" class="text" fill="#000" opacity="0.2">Boku wa Anime</text>
+  
+  <!-- Main Text -->
+  <text x="50" y="100" class="text">Boku wa Anime</text>
+</svg>

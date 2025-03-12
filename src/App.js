@@ -1,14 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
 
-import GiphyDupeHomepage from './pages/index';
+import BokuNoAnimeHomepage from './pages/index';
+import BokuWaAnimeContext from './contexts/BokuWaAnimeContext/BokuWaAnimeContext';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <GiphyDupeHomepage />
-      </header>
+    <div >
+      <BokuWaAnimeContext>
+        <BokuNoAnimeHomepage />
+      </BokuWaAnimeContext>
     </div>
   );
 }
