@@ -4,14 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useBokuWaAnimeHomepageContext } from '../contexts/BokuWaAnimeContext/BokuWaAnimeContext';
 import BokuWaAnimeContext from '../contexts/BokuWaAnimeContext/BokuWaAnimeContext';
 
-import DetailPage from './detail';
 import Header from "../components/Header/Header";
 import AnimeCard from '../components/AnimeCard/AnimeCard';
 import Button from '../components/Button/Button';
 import LoadingContainer from '../components/LoadingContainer/LoadingContainer';
 
-
-import '../App.css';
+import styles from '../PageStyles';
 
 function BokuNoAnimeHomepage() {
   const [state, actions] = useBokuWaAnimeHomepageContext();
@@ -36,7 +34,7 @@ function BokuNoAnimeHomepage() {
   };
 
   return (
-    <div style={{ marginLeft: '24px', marginRight: '24px' }}>
+    <div className={styles.mainContainer}>
       <Header />
       <div style={{ display: 'flex', flexDirection: 'row', gap: '16px', flexWrap: 'wrap', marginTop: '36px' }}>
         {isLoading && (
@@ -55,7 +53,7 @@ function BokuNoAnimeHomepage() {
           />
         ) : <></>}
       </div>
-      <div style={{ marginTop: '24px', marginBottom: '24px', display: 'flex', gap: '16px' }}>
+      <div className={styles.paginationButtonsContainer}>
         <Button onClick={onPrevPageButtonPress} disabled={offset === 0}>{'←'}</Button>
         <Button onClick={onNextPageButtonPress}>{'→'}</Button>
       </div>
