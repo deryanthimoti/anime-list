@@ -57,36 +57,32 @@ export default function BokuWaAnimeContext (props) {
 
   const goToPrevPage = async () => {
     setIsLoading(true);
-    const response = axios({
-      baseURL: BASE_URL,
-      url: `/anime?page[limit]=10&page[offset]=${state.offset - 10}`,
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-    });
-    response.then(res => {
-      dispatch({ type: 'SET_OFFSET', data: state.offset - 10 });
-      dispatch({ type: 'SET_ANIME_LIST', data: res.data.data });
-      setIsLoading(false);
-    });
+    dispatch({ type: 'SET_OFFSET', data: state.offset - 10 });
+    setIsLoading(false);
   };
 
   const goToNextPage = async () => {
     setIsLoading(true);
-    const response = axios({
-      baseURL: BASE_URL,
-      url: `/anime?page[limit]=10&page[offset]=${state.offset + 10}`,
-      headers: {
-        Accept: 'application/vnd.api+json',
-        'Content-Type': 'application/vnd.api+json',
-      },
-    });
-    response.then(res => {
+    if (state.offset === state.animeList.length - 10) {
+      const response = axios({
+        baseURL: BASE_URL,
+        url: `/anime?page[limit]=10&page[offset]=${state.offset + 10}`,
+        headers: {
+          Accept: 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
+        },
+      });
+      response.then(res => {
+        dispatch({ type: 'SET_OFFSET', data: state.offset + 10 });
+        const temp = [...state.animeList];
+        temp.push(...res.data.data);
+        dispatch({ type: 'SET_ANIME_LIST', data: temp });
+        setIsLoading(false);
+      });
+    } else {
       dispatch({ type: 'SET_OFFSET', data: state.offset + 10 });
-      dispatch({ type: 'SET_ANIME_LIST', data: res.data.data });
       setIsLoading(false);
-    });
+    }
   };
 
   const actions = {

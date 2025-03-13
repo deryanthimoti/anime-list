@@ -107,7 +107,7 @@ import styles from './AnimeCardStyles';
 // }
 export default function AnimeCard (props) {
   return (
-    <div className={styles.imageCardContainer}>
+    <div onClick={props.onClick} className={styles.imageCardContainer}>
       <div className={styles.imageCardImageContainer}>
         <img src={props.image} style={{ width: 200, height: 320 }} />
         <div className={styles.imageCardDarkOverlay}>
