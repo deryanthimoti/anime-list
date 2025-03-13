@@ -4,11 +4,16 @@ export default {
   loadingContainer: css({
     zIndex: 10,
     position: 'absolute',
-    width: '100vw',
-    height: '70vh',
+    width: '100%',
+    height: '75vh',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#282c34',
+    '@media (max-width: 960px)': {
+      height: '150vh',
+      marginTop: '-5px',
+    },
   }),
   loader: css ({
     width: '48px',
@@ -31,7 +36,6 @@ export default {
       margin: 'auto',
       border: '3px solid',
       borderRadius: '50%',
-      boxSizing: 'border-box',
       transformOrigin: 'center center',
     },
     '&::after': {

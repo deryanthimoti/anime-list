@@ -13,7 +13,7 @@ import styles from '../PageStyles';
 
 function BokuNoAnimeHomepage() {
   const [state, actions] = useBokuWaAnimeHomepageContext();
-  const { animeList, offset, isLoading } = state;
+  const { animeList, offset, isLoading, totalDataCount } = state;
   let navigate = useNavigate();
 
   const currentAnimeList = useMemo(() => {
@@ -36,7 +36,7 @@ function BokuNoAnimeHomepage() {
   return (
     <div className={styles.mainContainer}>
       <Header />
-      <div style={{ display: 'flex', flexDirection: 'row', gap: '16px', flexWrap: 'wrap', marginTop: '36px' }}>
+      <div className={styles.mainContentContainer}>
         {isLoading && (
           <LoadingContainer />
         )}
@@ -53,10 +53,16 @@ function BokuNoAnimeHomepage() {
           />
         ) : <></>}
       </div>
-      <div className={styles.paginationButtonsContainer}>
-        <Button onClick={onPrevPageButtonPress} disabled={offset === 0}>{'←'}</Button>
-        <Button onClick={onNextPageButtonPress}>{'→'}</Button>
+      <div className={styles.paginationSectionContainer}>
+        <div className={styles.paginationButtonsContainer}>
+          <Button onClick={onPrevPageButtonPress} disabled={offset === 0}>{'←'}</Button>
+          <Button onClick={onNextPageButtonPress}>{'→'}</Button>
+        </div>
+        <div className={styles.paginationTextContainer}>
+          {`Showing ${offset + 1}-${offset + 10} out of ${totalDataCount}`}
+        </div>
       </div>
+      
     </div>
   );
 }

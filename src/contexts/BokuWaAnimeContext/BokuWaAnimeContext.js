@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import axios from 'axios';
 
 import { BASE_URL } from "../../constants";
-import { mockList } from "../../mocks/mockList";
 
 const initialState = {
   animeList: [],
   isLoading: false,
   offset: 0,
+  totalDataCount: 0,
 };
 
 function reducer(state, action) {
@@ -18,6 +18,8 @@ function reducer(state, action) {
       return { ...state, isLoading: action.data };
     case 'SET_OFFSET':
       return { ...state, offset: action.data };
+    case 'SET_TOTAL_DATA_COUNT':
+      return { ...state, totalDataCount: action.data };
     default:
       return state;
   }
@@ -46,9 +48,9 @@ export default function BokuWaAnimeContext (props) {
     });
     response.then(res => {
       dispatch({ type: 'SET_ANIME_LIST', data: res.data.data });
+      dispatch({ type: 'SET_TOTAL_DATA_COUNT', data: res.data.meta.count });
       setIsLoading(false);
     });
-    dispatch({ type: 'SET_ANIME_LIST', data: mockList });
   }, []);
 
   const setIsLoading = (isLoading) => {
@@ -77,6 +79,7 @@ export default function BokuWaAnimeContext (props) {
         const temp = [...state.animeList];
         temp.push(...res.data.data);
         dispatch({ type: 'SET_ANIME_LIST', data: temp });
+        dispatch({ type: 'SET_TOTAL_DATA_COUNT', data: res.data.meta.count });
         setIsLoading(false);
       });
     } else {

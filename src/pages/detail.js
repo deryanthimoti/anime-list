@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 import Header from '../components/Header/Header';
+import Button from '../components/Button/Button';
 
 import { BASE_URL } from '../constants';
 
@@ -11,6 +12,7 @@ import styles from '../PageStyles';
 function DetailPage() {
   const [content, setContent] = useState(null);
   const [searchParams] = useSearchParams();
+  let navigate = useNavigate();
 
   useEffect(() => {
     const response = axios({
@@ -31,15 +33,18 @@ function DetailPage() {
       {content ? (
         <div className={styles.mainContainer}>
           <Header />
-          <div style={{ display: 'flex', marginTop: '24px', gap: '12px' }}>
-            <div>
-              <div style={{ fontSize: '24px', color: '#FFFFFF', fontWeight: '700', marginTop: '12px' }}>
-                {`${content.attributes.titles.en_jp} (${content.attributes.titles.ja_jp})`}
+          <div className={styles.backToHomeButtonContainer}>
+            <Button onClick={() => navigate("/")}>{'← Back to Home'}</Button>
+          </div>
+          <div className={styles.detailPageTitleSection}>
+            {`${content.attributes.titles.en_jp} (${content.attributes.titles.ja_jp})`}
+          </div>
+          <div className={styles.detailPageContainer}>
+            <div className={styles.detailPageDetailSection}>
+              <div className={styles.detailPageImageContainer}>
+                <img alt={content.attributes.posterImage.original} src={content.attributes.posterImage.original} className={styles.detailPageImage} />
               </div>
-              <div style={{ marginTop: '12px' }}>
-                <img src={content.attributes.posterImage.original} style={{ width: '240px', height: '400px'}} />
-              </div>
-              <div style={{ color: '#FFFFFF', marginTop: '12px' }}>
+              <div className={styles.detailPageDetailTable}>
                 <table>
                   <tr>
                     <td>{`User Rating`}</td>
@@ -49,12 +54,12 @@ function DetailPage() {
                   <tr>
                     <td>{`No. of Episodes`}</td>
                     <td>:</td>
-                    <td>{content.attributes.episodeCount}</td>
+                    <td>{content.attributes.episodeCount || '-'}</td>
                   </tr>
                   <tr>
                     <td>{`Minutes per Episode`}</td>
                     <td>:</td>
-                    <td>{content.attributes.episodeLength}</td>
+                    <td>{content.attributes.episodeLength || '?'}</td>
                   </tr>
                   <tr>
                     <td>{`Status`}</td>
@@ -69,8 +74,15 @@ function DetailPage() {
                 </table>
               </div>
             </div>
-            <div style={{ color: '#FFFFFF', marginTop: '12px' }}>
-              {content.attributes.synopsis}
+            <div className={styles.detailPageTitleAndSynopsisSection}>
+              <div className={styles.detailPageTitleText}>Synopsis</div>
+              <div className={styles.detailPageDescText}>
+                {content.attributes.synopsis}
+              </div>
+              <div className={styles.detailPageTitleText}>Airing Date</div>
+              <div className={styles.detailPageDescText}>
+                {content.attributes.startDate} - {content.attributes.endDate || '? (Ongoing)'}
+              </div>
             </div>
           </div>
         </div>
