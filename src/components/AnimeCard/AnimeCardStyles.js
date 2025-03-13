@@ -19,6 +19,19 @@ export default {
     borderStyle: 'solid',
     padding: '4px',
     position: 'relative',
+    '@media (max-width: 960px)': {
+      width: '150px',
+      height: '240px'
+    },
+  }),
+  image: css({
+    width: '200px',
+    height: '320px',
+    '@media (max-width: 800px)': {
+      opacity: 1,
+      width: '150px',
+      height: '240px'
+    },
   }),
   imageCardDarkOverlay: css({
     width: '200px',
@@ -29,6 +42,11 @@ export default {
     background: `linear-gradient(180deg, rgba(0,212,255,0) 0%, rgba(0,0,0,1) 100%)`,
     '&:hover': {
       opacity: 1,
+    },
+    '@media (max-width: 800px)': {
+      opacity: 1,
+      width: '150px',
+      height: '240px'
     },
   }),
   imageCardTextContainer: css({

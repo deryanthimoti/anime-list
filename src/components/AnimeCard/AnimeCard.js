@@ -109,7 +109,7 @@ export default function AnimeCard (props) {
   return (
     <div onClick={props.onClick} className={styles.imageCardContainer}>
       <div className={styles.imageCardImageContainer}>
-        <img src={props.image} style={{ width: 200, height: 320 }} />
+        <img src={props.image} className={styles.image} />
         <div className={styles.imageCardDarkOverlay}>
           <div className={styles.imageCardTextContainer}>
             {props.titleEn}
