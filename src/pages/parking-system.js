@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { ToastContainer } from 'react-toastify';
 
-import { useBokuWaAnimeHomepageContext } from '../contexts/BokuWaAnimeContext/BokuWaAnimeContext';
-import ParkingSystemContext from '../contexts/BokuWaAnimeContext/BokuWaAnimeContext';
+import ParkingSystemContext from '../contexts/ParkingSystemContext/ParkingSystemContext';
 
 import ParkingSystemHeader from '../components/ParkingSystemHeader/ParkingSystemHeader';
 import ParkingSystemContent from '../components/ParkingSystemContent/ParkingSystemContent';
@@ -10,14 +9,12 @@ import ParkingSystemContent from '../components/ParkingSystemContent/ParkingSyst
 import styles from '../PageStyles';
 
 function ParkingSystemPage() {
-  const [state, actions] = useBokuWaAnimeHomepageContext();
-  // const { animeList, offset, isLoading, totalDataCount } = state;
-  let navigate = useNavigate();
 
   return (
     <div className={styles.mainContainer}>
       <ParkingSystemHeader />
       <ParkingSystemContent />
+      <ToastContainer />
     </div>
   );
 }

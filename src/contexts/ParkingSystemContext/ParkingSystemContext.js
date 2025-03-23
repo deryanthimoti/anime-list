@@ -1,17 +1,23 @@
 import React, { useEffect } from "react";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
-import { BASE_URL } from "../../constants";
+import { 
+  PARKING_SYSTEM_BASE_URL, 
+  GET_PARKING_SPACES,
+  ADD_PARKING_SPACES,
+} from "../../constants";
 
 const initialState = {
-  parkingLotList: [],
+  parkingSpaceList: [],
   isLoading: false,
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    // case 'SET_ANIME_LIST':
-    //   return { ...state, animeList: action.data };
+    case 'SET_PARKING_SPACE_LIST':
+      return { ...state, parkingSpaceList: action.data };
     case 'SET_IS_LOADING':
       return { ...state, isLoading: action.data };
     // case 'SET_OFFSET':
@@ -31,32 +37,46 @@ ParkingSystemActionContext.displayName = 'ParkingSystemActionContext';
 
 export default function ParkingSystemContext (props) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
+  const navigate = useNavigate();
   
   // init
   useEffect(() => {
     setIsLoading(true);
-    // dispatch({ type: 'SET_OFFSET', data: 0 });
-    // const response = axios({
-    //   baseURL: BASE_URL,
-    //   url: `/anime?page[limit]=10&page[offset]=${state.offset}`,
-    //   headers: {
-    //     Accept: 'application/vnd.api+json',
-    //     'Content-Type': 'application/vnd.api+json',
-    //   },
-    // });
-    // response.then(res => {
-    //   dispatch({ type: 'SET_ANIME_LIST', data: res.data.data });
-    //   dispatch({ type: 'SET_TOTAL_DATA_COUNT', data: res.data.meta.count });
-    //   setIsLoading(false);
-    // });
+    dispatch({ type: 'SET_OFFSET', data: 0 });
+    const response = axios({
+      baseURL: PARKING_SYSTEM_BASE_URL,
+      url: GET_PARKING_SPACES,
+    });
+    response.then(res => {
+      dispatch({ type: 'SET_PARKING_SPACE_LIST', data: res.data.data })
+      setIsLoading(false);
+    });
   }, []);
 
   const setIsLoading = (isLoading) => {
     dispatch({ type: 'SET_IS_LOADING', data: isLoading });
   };
 
+  const addParkingLot = async (items) => {
+    const response = axios({
+      baseURL: PARKING_SYSTEM_BASE_URL,
+      url: ADD_PARKING_SPACES,
+      method: 'post',
+      data: {
+        parkingLots: [...items],
+      }
+    });
+    response.then(res => {
+      toast.success(res.data.message, { theme: 'colored' });
+      setTimeout(() => {
+        navigate('/parking-system');
+      }, 2000);
+    });
+  };
+
   const actions = {
     setIsLoading,
+    addParkingLot,
   };
 
   return (
