@@ -7,6 +7,8 @@ import {
   PARKING_SYSTEM_BASE_URL, 
   GET_PARKING_SPACES,
   ADD_PARKING_SPACES,
+  PARK_VEHICLE,
+  UNPARK_VEHICLE,
 } from "../../constants";
 
 const initialState = {
@@ -39,7 +41,6 @@ export default function ParkingSystemContext (props) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const navigate = useNavigate();
   
-  // init
   useEffect(() => {
     setIsLoading(true);
     dispatch({ type: 'SET_OFFSET', data: 0 });
@@ -74,9 +75,64 @@ export default function ParkingSystemContext (props) {
     });
   };
 
+  const park = async ({ vehicleType, entryPoint, entryDateTime }) => {
+    const date = entryDateTime ? new Date(entryDateTime) : new Date();
+    const response = axios({
+      baseURL: PARKING_SYSTEM_BASE_URL,
+      url: PARK_VEHICLE,
+      method: 'post',
+      data: {
+        vehicleType,
+        entryPoint,
+        entryTime: date
+      }
+    });
+    response.then(res => {
+      toast.success(res.data.message, { theme: 'colored' });
+      setIsLoading(true);
+      dispatch({ type: 'SET_OFFSET', data: 0 });
+      const response = axios({
+        baseURL: PARKING_SYSTEM_BASE_URL,
+        url: GET_PARKING_SPACES,
+      });
+      response.then(res => {
+        dispatch({ type: 'SET_PARKING_SPACE_LIST', data: res.data.data })
+        setIsLoading(false);
+      });
+    });
+  };
+
+  const unpark = async (parkingLotId, exitDateTime) => {
+    const date = exitDateTime ? new Date(exitDateTime) : new Date();
+    const response = axios({
+      baseURL: PARKING_SYSTEM_BASE_URL,
+      url: UNPARK_VEHICLE,
+      method: 'post',
+      data: {
+        parkingLotId,
+        exitTime: date
+      }
+    });
+    response.then(res => {
+      toast.success(res.data.message, { theme: 'colored' });
+      setIsLoading(true);
+      dispatch({ type: 'SET_OFFSET', data: 0 });
+      const response = axios({
+        baseURL: PARKING_SYSTEM_BASE_URL,
+        url: GET_PARKING_SPACES,
+      });
+      response.then(res => {
+        dispatch({ type: 'SET_PARKING_SPACE_LIST', data: res.data.data })
+        setIsLoading(false);
+      });
+    });
+  };
+
   const actions = {
     setIsLoading,
     addParkingLot,
+    park,
+    unpark,
   };
 
   return (

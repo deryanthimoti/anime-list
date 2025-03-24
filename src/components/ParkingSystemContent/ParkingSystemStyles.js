@@ -41,5 +41,9 @@ export default {
   mainButtonContainer: css({
     gap: '12px',
     display: 'flex',
+  }),
+  parkingForm: css({
+    color: '#ffffff',
+    marginTop: '16px',
   })
 }

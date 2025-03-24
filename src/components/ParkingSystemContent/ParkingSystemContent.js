@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useParkingSystemContext } from '../../contexts/ParkingSystemContext/ParkingSystemContext';
@@ -10,7 +10,23 @@ import styles from './ParkingSystemStyles';
 
 export default function ParkingSystemContent() {
   const [state, actions] = useParkingSystemContext();
+  const [formState, setFormState] = useState({
+    entryPoint: '0',
+    vehicleType: 'S',
+  });
   let navigate = useNavigate();
+
+  const onVehicleTypeChange = (event) => {
+    const tempFormState = {...formState};
+    tempFormState.vehicleType = event.target.value;
+    setFormState(tempFormState);
+  };
+
+  const onEntryPointChange = (event) => {
+    const tempFormState = {...formState};
+    tempFormState.entryPoint = event.target.value;
+    setFormState(tempFormState);
+  };
 
   const getSpaceType = (val) => {
     switch (val) {
@@ -33,6 +49,29 @@ export default function ParkingSystemContent() {
       <div className={styles.mainButtonContainer}>
         <Button>{`Initialize Parking Lot`}</Button>
         <Button onClick={() => navigate("/add-parking-space")}>{`Add Parking Spaces`}</Button>
+      </div>
+
+      <div className={styles.parkingForm}>
+        <div>
+          Vehicle Type
+          <select style={{ marginLeft: 8 }} value={formState.vehicleType} onChange={(e) => onVehicleTypeChange(e)}>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+          </select>
+        </div>
+        <div>
+          Entry Point
+          <select style={{ marginLeft: 8 }} value={formState.entryPoint} onChange={(e) => onEntryPointChange(e)}>
+            <option>0</option>
+            <option>1</option>
+            <option>2</option>
+          </select>
+          <div style={{ marginTop: 8 }}>
+            <ActionButton onClick={() => actions.park({ vehicleType: formState.vehicleType, entryPoint: formState.entryPoint })}>Park Vehicle</ActionButton>
+          </div>
+        </div>
+        
       </div>
 
       <div className={styles.parkingSpaceTableTitle}>Parking Space</div>
@@ -61,7 +100,8 @@ export default function ParkingSystemContent() {
                 </div>
               </td>
               <td>
-                {!parkingSpace.is_available && <ActionButton>Unpark</ActionButton>}
+                {/* Join the database 1st before sending the data */}
+                {!parkingSpace.is_available && <ActionButton onClick={() => actions.unpark(parkingSpace.id)}>Unpark</ActionButton>}
               </td>
             </tr>
           )) : (
