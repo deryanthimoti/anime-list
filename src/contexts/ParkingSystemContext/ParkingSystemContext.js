@@ -9,6 +9,7 @@ import {
   ADD_PARKING_SPACES,
   PARK_VEHICLE,
   UNPARK_VEHICLE,
+  REINITIALIZE_PARKING_LOT,
 } from "../../constants";
 
 const initialState = {
@@ -22,10 +23,6 @@ function reducer(state, action) {
       return { ...state, parkingSpaceList: action.data };
     case 'SET_IS_LOADING':
       return { ...state, isLoading: action.data };
-    // case 'SET_OFFSET':
-    //   return { ...state, offset: action.data };
-    // case 'SET_TOTAL_DATA_COUNT':
-    //   return { ...state, totalDataCount: action.data };
     default:
       return state;
   }
@@ -56,6 +53,28 @@ export default function ParkingSystemContext (props) {
 
   const setIsLoading = (isLoading) => {
     dispatch({ type: 'SET_IS_LOADING', data: isLoading });
+  };
+
+  const reInitialize = async () => {
+    const response = axios({
+      baseURL: PARKING_SYSTEM_BASE_URL,
+      url: REINITIALIZE_PARKING_LOT,
+      method: 'post',
+      data: {
+        numOfEntryPoint: 3
+      }
+    });
+    response.then(res => {
+      toast.success(res.data.message, { theme: 'colored' });
+      const response = axios({
+        baseURL: PARKING_SYSTEM_BASE_URL,
+        url: GET_PARKING_SPACES,
+      });
+      response.then(res => {
+        dispatch({ type: 'SET_PARKING_SPACE_LIST', data: res.data.data })
+        setIsLoading(false);
+      });
+    });
   };
 
   const addParkingLot = async (items) => {
@@ -130,6 +149,7 @@ export default function ParkingSystemContext (props) {
 
   const actions = {
     setIsLoading,
+    reInitialize,
     addParkingLot,
     park,
     unpark,

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DatePicker from "react-datepicker";
 
 import { useParkingSystemContext } from '../../contexts/ParkingSystemContext/ParkingSystemContext';
 
@@ -13,6 +14,7 @@ export default function ParkingSystemContent() {
   const [formState, setFormState] = useState({
     entryPoint: '0',
     vehicleType: 'S',
+    entryTime: undefined,
   });
   let navigate = useNavigate();
 
@@ -47,33 +49,45 @@ export default function ParkingSystemContent() {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.mainButtonContainer}>
-        <Button>{`Initialize Parking Lot`}</Button>
+        <Button onClick={() => actions.reInitialize()}>{`Initialize Parking Lot`}</Button>
         <Button onClick={() => navigate("/add-parking-space")}>{`Add Parking Spaces`}</Button>
       </div>
 
-      <div className={styles.parkingForm}>
-        <div>
-          Vehicle Type
-          <select style={{ marginLeft: 8 }} value={formState.vehicleType} onChange={(e) => onVehicleTypeChange(e)}>
-            <option>S</option>
-            <option>M</option>
-            <option>L</option>
-          </select>
-        </div>
-        <div>
-          Entry Point
-          <select style={{ marginLeft: 8 }} value={formState.entryPoint} onChange={(e) => onEntryPointChange(e)}>
-            <option>0</option>
-            <option>1</option>
-            <option>2</option>
-          </select>
+      {state.parkingSpaceList.length > 0 && (
+        <div className={styles.parkingForm}>
+          <div>
+            Vehicle Type
+            <select style={{ marginLeft: 8 }} value={formState.vehicleType} onChange={(e) => onVehicleTypeChange(e)}>
+              <option>S</option>
+              <option>M</option>
+              <option>L</option>
+            </select>
+          </div>
+          <div>
+            Entry Point
+            <select style={{ marginLeft: 8 }} value={formState.entryPoint} onChange={(e) => onEntryPointChange(e)}>
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+            </select>
+          </div>
+          
+          <DatePicker
+            selected={formState.entryTime}
+            onChange={(date) => setFormState({ ...formState, entryTime: date })}
+            isClearable
+            placeholderText="Select time and date"
+            dateFormat="MM/dd/yyyy h:mm aa"
+            showTimeInput
+            maxDate={new Date()}
+          />
+
           <div style={{ marginTop: 8 }}>
-            <ActionButton onClick={() => actions.park({ vehicleType: formState.vehicleType, entryPoint: formState.entryPoint })}>Park Vehicle</ActionButton>
+            <ActionButton onClick={() => actions.park({ vehicleType: formState.vehicleType, entryPoint: formState.entryPoint, entryDateTime: formState.entryTime })}>Park Vehicle</ActionButton>
           </div>
         </div>
-        
-      </div>
-
+      )}
+      
       <div className={styles.parkingSpaceTableTitle}>Parking Space</div>
       <table className={styles.parkingSpaceTable}>
         <thead>
